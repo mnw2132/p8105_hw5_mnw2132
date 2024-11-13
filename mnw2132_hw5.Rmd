@@ -48,6 +48,25 @@ sim_bday %>%
 theme_minimal()
 ```
 
+# Problem 2
+```{r}
+set.seed(1)
 
+#Create the function 
+t_test <- function(n, mu = 30, sigma = 5) {
+  sim_test <- tibble(
+    x = rnorm(n, mean = mu, sd = sigma))
+  
+  test_result <- t.test(sim_data$x, mu = 0)
+  tidy_result <- tidy(test_result)
+  
+  tibble(
+    mu_hat = mean(sim_test$x),
+    p_value = tidy_result$p.value
+  )
+}
+```
 
+```{r}
+```
 
