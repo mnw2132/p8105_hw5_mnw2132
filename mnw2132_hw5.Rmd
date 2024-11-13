@@ -16,3 +16,38 @@ library(rvest)
 ```
 
 # Problem 1
+### Create the function
+```{r}
+#Create the function
+birthday_data<-function(sample_size) {
+  bday<- sample(1:365, sample_size, replace = TRUE)
+  any(duplicated(bday))
+}
+```
+
+
+```{r}
+# Run the function
+sim_bday= 
+  tibble(
+    sample_size = 2:50) %>%
+  mutate(
+    output_lists = map(.x = sample_size, ~rerun(10000, birthday_data(.x))), 
+    estimate_df= map_dbl(output_lists, ~mean(unlist(.)))
+) %>%
+  select(sample_size, estimate_df)
+```
+### Graph the function
+```{r}
+sim_bday %>%
+  ggplot(aes(x = sample_size, y = estimate_df)) +   geom_line(color = "light blue") +  geom_point(color = "blue") + 
+  labs(
+    x = "Sample Size",
+    y = "Probability of Duplicate Birthday",
+    title = "Probability that ≥2 Share a Birthday") + 
+theme_minimal()
+```
+
+
+
+
