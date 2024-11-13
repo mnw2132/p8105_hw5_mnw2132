@@ -41,7 +41,7 @@ sim_bday=
 ### Graph the function
 ```{r}
 sim_bday %>%
-  ggplot(aes(x = sample_size, y = estimate_df)) +   geom_line(color = "light blue") +  geom_point(color = "blue") + 
+  ggplot(aes(x = sample_size, y = estimate_df)) +   geom_line(color = "light pink") +  geom_point(color = "red") + 
   labs(
     x = "Sample Size",
     y = "Probability of Duplicate Birthday",
