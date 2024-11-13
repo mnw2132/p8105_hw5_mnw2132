@@ -1,0 +1,18 @@
+---
+title: "p8105_hw5_mnw2132"
+author: "Mary Williams"
+date: "2024-11-15"
+output: github_document
+---
+# Set up 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_libraries}
+library(tidyverse)
+library(ggplot2)
+library(rvest)
+```
+
+# Problem 1
