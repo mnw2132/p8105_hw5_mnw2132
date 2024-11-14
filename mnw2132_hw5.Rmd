@@ -127,5 +127,64 @@ ggplot(rejected_df, aes(x = true_mu, y = avg_rejected)) +
               title = "Average estimate of mu hat for rejected null hypotheses")
 
 ```
-For the rejected null graph, unlike the first graph, there is some variation in the point position. Specifically, for a true mean of 0, the rejection is negative, and for 1, the rejected null is about 2.5. This demonstrates that for smaller effect sizes or true means, there is a higher chance of failing to reject a false null hypothsis
+For the rejected null graph, unlike the first graph, there is some variation in the point position. Specifically, for a true mean of 0, the rejection is negative, and for 1, the rejected null is about 2.5. This demonstrates that for smaller effect sizes or true means, there is a higher chance of failing to reject a false null hypothesis.
 
+# Problem 3 
+
+### Load info
+```{r}
+homicide_df = read.csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
+summary(homicide_df)
+```
+The raw data includes information about the ID, information about the report like date, information about the victum like name, race, age and sex. And then location information like city, state and latitude, longitude, and disposition.  
+
+### Create location variable
+```{r}
+homicide_df = homicide_df %>%
+  mutate(location = paste(city, state, sep = ","))
+```
+
+### Homicides in each city
+```{r}
+city_summary = homicide_df %>%
+  group_by(location) %>%
+  summarize(
+    total_homicides = n(),
+    unsolved_homicides = sum(disposition %in% c("Closed without arrest", "Open/No arrest"))
+  )
+
+print(city_summary)
+```
+There are some cities that have less than 10 
+### Baltimore, MD
+```{r}
+baltimore_data = city_summary %>%
+  filter(location == "Baltimore,MD")
+
+baltimore_prop = prop.test(baltimore_data$unsolved_homicides, baltimore_data$total_homicides)
+baltimore_results = broom::tidy(baltimore_prop) %>%
+  select(estimate, conf.low, conf.high)
+
+```
+
+### Estimate proportions 
+```{r}
+city_summary = city_summary %>%
+  filter(total_homicides >2) %>%
+  mutate(
+    prop_test = map2(unsolved_homicides, total_homicides, ~prop.test(.x, .y) %>% 
+    tidy()),
+    estimate = map_dbl(prop_test, "estimate"),
+    conf.low = map_dbl(prop_test, "conf.low"),
+    conf.high = map_dbl(prop_test, "conf.high")
+  )
+```
+
+### Plot proportion estimates for CI
+```{r}
+ggplot(city_summary, aes(x = reorder(location, estimate), y = estimate)) + 
+  geom_point() + 
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high)) +
+  labs(x = "Location", y = "Proportion of Unsolved Homicides", title = "Proportion of Unsolved Homicides by City") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
