@@ -185,6 +185,6 @@ city_summary = city_summary %>%
 ggplot(city_summary, aes(x = reorder(location, estimate), y = estimate)) + 
   geom_point() + 
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high)) +
-  labs(x = "Location", y = "Proportion of Unsolved Homicides", title = "Proportion of Unsolved Homicides by City") + 
+  labs(x = "Location", y = "Proportion of Unsolved Homicides", title = "Proportion of Unsolved Homicides by each location") + 
     theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
