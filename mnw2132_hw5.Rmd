@@ -133,7 +133,7 @@ For the rejected null graph, unlike the first graph, there is some variation in 
 
 ### Load info
 ```{r}
-homicide_df = read.csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
+homicide_df = read.csv("data/homicide-data.csv")
 summary(homicide_df)
 ```
 The raw data includes information about the ID, information about the report like date, information about the victum like name, race, age and sex. And then location information like city, state and latitude, longitude, and disposition.  
